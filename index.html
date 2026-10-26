@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perfume Finder UK — Prototype</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --site-primary: #253d35;
+  --site-secondary: #d8b777;
+  --site-background: #f5f3ee;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #201b12;
+  --site-on-background: #252a27;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Georgia, "Times New Roman", serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --surface: light-dark(#ffffff, #202522);
+  --surface-soft: light-dark(#f0eee7, #292f2b);
+  --text-muted: light-dark(#6b736e, #b3bdb6);
+  --border: light-dark(#e4e1d8, #3a433d);
+  --green: light-dark(#2c6550, #91d0b0);
+  --amber: light-dark(#a97826, #e9c87f);
+  --danger: light-dark(#9e453b, #ff9c91);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app { min-height: 100vh; background: var(--site-background); }
+.topbar { background: var(--site-primary); color: var(--site-on-primary); padding: 20px 18px 24px; position: relative; overflow: hidden; }
+.topbar:after { content:""; position:absolute; width:190px; height:190px; right:-70px; top:-90px; border:1px solid color-mix(in srgb, var(--site-secondary), transparent 45%); border-radius:50%; opacity:var(--site-decoration-opacity); box-shadow:0 0 0 22px color-mix(in srgb, var(--site-secondary), transparent 90%),0 0 0 46px color-mix(in srgb, var(--site-secondary), transparent 94%); pointer-events:none; }
+.brand-row { display:flex; align-items:center; gap:11px; max-width:1050px; margin:auto; position:relative; z-index:1; }
+.brand-icon { width:43px;height:43px;border-radius:14px; display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-size:22px; }
+.brand-name { font-size:12px; letter-spacing:2.3px; text-transform:uppercase; opacity:.84; }
+.brand-sub { font-size:12px; opacity:.72; margin-top:4px; }
+.hero { max-width:1050px; margin:25px auto 0; position:relative; z-index:1; }
+.eyebrow { color:var(--site-secondary); text-transform:uppercase; letter-spacing:2px; font-size:10px; font-weight:800; }
+h1 { font-family:var(--site-font-heading); font-size:calc(36px * var(--site-heading-scale)); line-height:1.05; font-weight:500; margin:9px 0 10px; letter-spacing:-1px; }
+.hero p { color:color-mix(in srgb, var(--site-on-primary), transparent 22%); font-size:13px; max-width:520px; line-height:1.6; margin:0; }
+main { max-width:1050px; margin:auto; padding:18px 14px 40px; }
+.demo-banner { background:light-dark(#fff7e4,#3c3422); border:1px solid light-dark(#ecd9ad,#66522a); color:light-dark(#69501c,#f2d89b); border-radius:12px; padding:11px 13px; font-size:11px; line-height:1.5; margin-bottom:16px; display:flex; gap:9px; align-items:flex-start; }
+.demo-banner strong { display:block; font-size:12px; margin-bottom:2px; }
+.grid { display:grid; grid-template-columns:1fr; gap:14px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:calc(18px * var(--site-radius-scale)); padding:17px; box-shadow:0 4px 18px rgba(20,25,20,.025); }
+.card-head { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:15px; }
+.card h2 { font-size:14px; margin:0; font-weight:750; letter-spacing:-.2px; }
+.card-sub { color:var(--text-muted); font-size:11px; margin-top:5px; line-height:1.45; }
+.pill { display:inline-flex; align-items:center; gap:5px; border-radius:100px; background:var(--surface-soft); color:var(--text-muted); padding:6px 9px; font-size:10px; white-space:nowrap; }
+.pill-dot { width:6px;height:6px;border-radius:50%;background:var(--amber); }
+.categories { display:grid; grid-template-columns:1fr; gap:8px; }
+.category { display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--surface); }
+.category input { accent-color:var(--site-primary); width:17px;height:17px; }
+.category-icon { width:35px;height:35px; flex:0 0 35px; display:grid;place-items:center; background:var(--surface-soft); border-radius:10px; font-size:17px; }
+.category strong { display:block; font-size:12px; }
+.category small { display:block; color:var(--text-muted); font-size:10px; margin-top:3px; }
+.field-label { display:block; font-size:11px; color:var(--text-muted); margin:16px 0 7px; font-weight:650; }
+select, input[type="text"] { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--site-on-background); border-radius:10px; padding:12px; font-size:12px; outline-offset:2px; }
+.checkrow { display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:12px; }
+.checkrow label { display:flex; gap:6px; align-items:center; color:var(--text-muted); font-size:11px; }
+.checkrow input { accent-color:var(--site-primary); }
+.scan-btn { width:100%; margin-top:17px; background:var(--site-primary); color:var(--site-on-primary); border:0; border-radius:12px; padding:15px; font-size:12px; font-weight:800; letter-spacing:.8px; display:flex; align-items:center; justify-content:center; gap:9px; transition:transform .15s, opacity .15s; }
+.scan-btn:active { transform:scale(.99); }
+.scan-btn:disabled { opacity:.65; cursor:wait; }
+.scan-note { color:var(--text-muted); font-size:10px; text-align:center; line-height:1.5; margin:10px 0 0; }
+.progress-wrap { display:none; margin-top:16px; padding:13px; background:var(--surface-soft); border-radius:12px; }
+.progress-title { display:flex; justify-content:space-between; gap:8px; font-size:11px; font-weight:700; margin-bottom:9px; }
+.progress-track { height:6px; border-radius:9px; background:var(--border); overflow:hidden; }
+.progress-fill { height:100%; width:0; background:var(--site-secondary); border-radius:9px; transition:width .4s; }
+.progress-caption { color:var(--text-muted); font-size:10px; margin-top:8px; }
+.stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+.stat { padding:14px 12px; border-radius:13px; background:var(--surface-soft); min-width:0; }
+.stat-label { color:var(--text-muted); font-size:10px; line-height:1.4; }
+.stat-value { font-family:var(--site-font-heading); font-size:27px; margin-top:7px; letter-spacing:-.5px; }
+.stat-change { color:var(--green); font-size:10px; margin-top:4px; }
+.results-card { margin-top:14px; }
+.result-toolbar { display:flex; flex-direction:column; gap:10px; margin-bottom:13px; }
+.searchbox { position:relative; flex:1; }
+.searchbox span { position:absolute; top:50%; left:12px; transform:translateY(-50%); opacity:.55; }
+.searchbox input { padding-left:35px; }
+.toolbar-actions { display:flex; gap:8px; }
+.secondary-btn { border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--site-on-background); padding:10px 12px; font-size:11px; font-weight:700; flex:1; }
+.secondary-btn.primary-outline { color:var(--green); }
+.filters { display:flex; gap:6px; overflow:auto; padding-bottom:3px; margin-bottom:12px; }
+.filter { border:1px solid var(--border); background:var(--surface); color:var(--text-muted); border-radius:100px; padding:7px 11px; font-size:10px; white-space:nowrap; }
+.filter.active { background:var(--site-primary); border-color:var(--site-primary); color:var(--site-on-primary); }
+.result-list { display:grid; gap:9px; }
+.business { border:1px solid var(--border); border-radius:13px; padding:13px; display:grid; grid-template-columns:1fr; gap:10px; }
+.business-top { display:flex; align-items:flex-start; gap:10px; }
+.business-logo { width:39px;height:39px;flex:0 0 39px; border-radius:11px; background:var(--surface-soft); display:grid;place-items:center;font-size:18px; }
+.business-name { font-size:12px; font-weight:750; line-height:1.4; }
+.business-location { font-size:10px; color:var(--text-muted); margin-top:4px; }
+.tag { display:inline-block; font-size:9px; padding:4px 7px; border-radius:6px; margin-top:6px; background:light-dark(#e9f2ec,#2d4335); color:var(--green); }
+.contact-lines { display:grid; gap:7px; font-size:11px; }
+.contact-line { display:flex; align-items:flex-start; gap:7px; min-width:0; color:var(--text-muted); overflow-wrap:anywhere; }
+.contact-line b { color:var(--site-on-background); font-weight:600; }
+.contact-line a { color:var(--green); text-decoration:none; }
+.source-line { border-top:1px solid var(--border); padding-top:9px; font-size:10px; color:var(--text-muted); display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.source-line a { color:var(--green); text-decoration:none; }
+.empty-state { padding:30px 15px; text-align:center; color:var(--text-muted); font-size:12px; line-height:1.6; }
+.empty-state .empty-icon { font-size:28px; margin-bottom:8px; }
+.footer { max-width:1050px; margin:auto; padding:0 15px 24px; color:var(--text-muted); font-size:10px; line-height:1.6; text-align:center; }
+@media(min-width:720px) {
+ .topbar { padding:25px 28px 30px; }
+ .hero { margin-top:32px; }
+ h1 { font-size:calc(46px * var(--site-heading-scale)); }
+ main { padding:24px 28px 45px; }
+ .grid { grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); align-items:start; }
+ .categories { grid-template-columns:1fr; }
+ .stats { grid-template-columns:repeat(4,minmax(0,1fr)); }
+ .result-toolbar { flex-direction:row; align-items:center; }
+ .toolbar-actions { flex:0 0 auto; }
+ .secondary-btn { flex:initial; }
+ .business { grid-template-columns:minmax(190px,.8fr) minmax(0,1fr); }
+ .source-line { grid-column:1/-1; }
+}
+@media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+  <header class="topbar">
+    <div class="brand-row">
+      <div class="brand-icon" aria-hidden="true">✦</div>
+      <div><div class="brand-name">Perfume Finder</div><div class="brand-sub">UK business discovery</div></div>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">Fragrance trade · United Kingdom</div>
+      <h1>Find your next<br>business connection.</h1>
+      <p>Discover perfume retailers, wholesalers and distributors, then organise their publicly listed business contact details in one place.</p>
+    </div>
+  </header>
+  <main>
+    <div class="demo-banner" role="note"><span aria-hidden="true">ⓘ</span><div><strong>Interactive prototype — sample data only</strong>The Scan button demonstrates the workflow. Live discovery is not connected yet, so the example businesses below are fictional and must not be used as real leads.</div></div>
+    <div class="grid">
+      <section class="card">
+        <div class="card-head"><div><h2>Scan settings</h2><div class="card-sub">Choose which fragrance businesses to discover.</div></div><span class="pill"><span class="pill-dot"></span> Manual scan</span></div>
+        <div class="categories">
+          <label class="category"><input type="checkbox" class="cat-check" value="Retailer" checked><span class="category-icon">🛍️</span><span><strong>Perfume retailers</strong><small>Shops, online stores, niche and designer fragrance</small></span></label>
+          <label class="category"><input type="checkbox" class="cat-check" value="Wholesaler" checked><span class="category-icon">📦</span><span><strong>Perfume wholesalers</strong><small>Bulk suppliers and trade-only sellers</small></span></label>
+          <label class="category"><input type="checkbox" class="cat-check" value="Distributor" checked><span class="category-icon">🚚</span><span><strong>Perfume distributors</strong><small>Importers and fragrance distribution companies</small></span></label>
+        </div>
+        <label class="field-label" for="country">Search region</label>
+        <select id="country"><option>United Kingdom</option></select>
+        <label class="field-label" for="scope">Discovery sources</label>
+        <select id="scope"><option value="all">Search engines + directories + business APIs</option><option value="web">Search engines and official websites</option><option value="directories">Business directories and discovery APIs</option></select>
+        <div class="checkrow"><label><input type="checkbox" checked id="extractEmails"> Public emails</label><label><input type="checkbox" checked id="extractPhones"> Business phones</label><label><input type="checkbox" checked id="extractSocial"> Social profiles</label><label><input type="checkbox" checked id="dedupe"> Remove duplicates</label></div>
+        <button class="scan-btn" id="scanBtn"><span aria-hidden="true">⌕</span> SCAN FOR BUSINESSES</button>
+        <p class="scan-note">Only starts when you press Scan. In the finished app, scans will run on a hosted service.</p>
+        <div class="progress-wrap" id="progressWrap" aria-live="polite"><div class="progress-title"><span id="progressTitle">Preparing scan…</span><span id="progressPercent">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-caption" id="progressCaption">Demo simulation — no live search is running.</div></div>
+      </section>
+      <section class="card">
+        <div class="card-head"><div><h2>Workspace overview</h2><div class="card-sub">Example metrics to show how your dashboard will work.</div></div><span class="pill">Demo</span></div>
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Businesses saved</div><div class="stat-value" id="statBusinesses">6</div><div class="stat-change">Sample records</div></div>
+          <div class="stat"><div class="stat-label">Public emails</div><div class="stat-value" id="statEmails">5</div><div class="stat-change">Example only</div></div>
+          <div class="stat"><div class="stat-label">Phone numbers</div><div class="stat-value" id="statPhones">5</div><div class="stat-change">Example only</div></div>
+          <div class="stat"><div class="stat-label">Last scan</div><div class="stat-value" style="font-size:19px" id="statLast">Not yet</div><div class="stat-change">Press Scan to try</div></div>
+        </div>
+        <div style="margin-top:17px;padding:14px;border:1px solid var(--border);border-radius:13px">
+          <div style="font-size:12px;font-weight:750;margin-bottom:7px">How it will work</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.8">① Discover businesses from connected sources<br>② Visit accessible official websites<br>③ Extract public contact details and source links<br>④ Deduplicate and save records<br>⑤ Export your list to a spreadsheet</div>
+        </div>
+      </section>
+    </div>
+    <section class="card results-card">
+      <div class="card-head"><div><h2>Business database</h2><div class="card-sub">Browse the sample records and try the filters.</div></div><span class="pill" id="resultCount">6 sample records</span></div>
+      <div class="result-toolbar"><div class="searchbox"><span>⌕</span><input id="searchInput" type="text" placeholder="Search business, email or location…" aria-label="Search businesses"></div><div class="toolbar-actions"><button class="secondary-btn" id="exportBtn">↓ Export CSV</button><button class="secondary-btn primary-outline" id="resetBtn">Reset filters</button></div></div>
+      <div class="filters" id="filters"><button class="filter active" data-filter="All">All businesses</button><button class="filter" data-filter="Retailer">Retailers</button><button class="filter" data-filter="Wholesaler">Wholesalers</button><button class="filter" data-filter="Distributor">Distributors</button><button class="filter" data-filter="Email">Has email</button><button class="filter" data-filter="Phone">Has phone</button></div>
+      <div class="result-list" id="resultList"></div>
+    </section>
+  </main>
+  <div class="footer">Prototype for planning purposes. Sample businesses and contact details are fictional. Live operation requires connecting authorised discovery sources, a database and a hosted extraction service.</div>
+</div>
+<script>
+const sampleBusinesses = [
+ {name:"Amber & Oud Fragrance",type:"Retailer",city:"Manchester",postcode:"M1 (example)",email:"hello@example.invalid",phone:"Not provided",website:"https://example.invalid/amber-oud",social:"Not provided",source:"Fictional sample record"},
+ {name:"Northstar Perfume Trade",type:"Wholesaler",city:"Birmingham",postcode:"B1 (example)",email:"trade@example.invalid",phone:"+44 0000 000001",website:"https://example.invalid/northstar",social:"Not provided",source:"Fictional sample record"},
+ {name:"Crown Fragrance Distribution",type:"Distributor",city:"London",postcode:"EC1 (example)",email:"contact@example.invalid",phone:"+44 0000 000002",website:"https://example.invalid/crown-fragrance",social:"Not provided",source:"Fictional sample record"},
+ {name:"Scent Market Online",type:"Retailer",city:"Leeds",postcode:"LS1 (example)",email:"support@example.invalid",phone:"+44 0000 000003",website:"https://example.invalid/scent-market",social:"Not provided",source:"Fictional sample record"},
+ {name:"Wholesale Aroma House",type:"Wholesaler",city:"Leicester",postcode:"LE1 (example)",email:"sales@example.invalid",phone:"+44 0000 000004",website:"https://example.invalid/aroma-house",social:"Not provided",source:"Fictional sample record"},
+ {name:"Britannia Fragrance Imports",type:"Distributor",city:"Glasgow",postcode:"G1 (example)",email:"Not listed",phone:"+44 0000 000005",website:"https://example.invalid/britannia-fragrance",social:"Not provided",source:"Fictional sample record"}
+];
+let activeFilter = 'All';
+let scanTimer = null;
+const list = document.getElementById('resultList');
+const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function renderResults(){
+ const q = document.getElementById('searchInput').value.trim().toLowerCase();
+ const filtered = sampleBusinesses.filter(b => {
+   const matchFilter = activeFilter==='All' || b.type===activeFilter || (activeFilter==='Email' && b.email!=='Not listed') || (activeFilter==='Phone' && b.phone!=='Not provided');
+   const matchQ = !q || [b.name,b.type,b.city,b.email,b.phone,b.website].join(' ').toLowerCase().includes(q);
+   return matchFilter && matchQ;
+ });
+ document.getElementById('resultCount').textContent = `${filtered.length} sample record${filtered.length===1?'':'s'}`;
+ if(!filtered.length){ list.innerHTML='<div class="empty-state"><div class="empty-icon">⌕</div>No sample businesses match that search.<br>Try another term or reset the filters.</div>'; return; }
+ list.innerHTML = filtered.map(b=>`<article class="business">
+  <div class="business-top"><div class="business-logo">${b.type==='Retailer'?'🛍️':b.type==='Wholesaler'?'📦':'🚚'}</div><div><div class="business-name">${escapeHtml(b.name)}</div><div class="business-location">${escapeHtml(b.city)} · ${escapeHtml(b.postcode)}</div><span class="tag">${escapeHtml(b.type)}</span></div></div>
+  <div class="contact-lines">
+   <div class="contact-line"><span>✉</span><span><b>Email</b><br>${escapeHtml(b.email)}</span></div>
+   <div class="contact-line"><span>☎</span><span><b>Phone</b><br>${escapeHtml(b.phone)}</span></div>
+   <div class="contact-line"><span>↗</span><span><b>Website</b><br>${escapeHtml(b.website)}</span></div>
+   <div class="contact-line"><span>◎</span><span><b>Social</b><br>${escapeHtml(b.social)}</span></div>
+  </div>
+  <div class="source-line"><span>Source: ${escapeHtml(b.source)}</span><span>⚠ Fictional demo</span></div>
+ </article>`).join('');
+}
+document.getElementById('searchInput').addEventListener('input',renderResults);
+document.getElementById('filters').addEventListener('click',e=>{const btn=e.target.closest('button[data-filter]');if(!btn)return;activeFilter=btn.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===btn));renderResults();});
+document.getElementById('resetBtn').addEventListener('click',()=>{activeFilter='All';document.getElementById('searchInput').value='';document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x.dataset.filter==='All'));renderResults();});
+document.getElementById('exportBtn').addEventListener('click',()=>{
+ const q=document.getElementById('searchInput').value.trim().toLowerCase();
+ const rows=sampleBusinesses.filter(b=>(activeFilter==='All'||b.type===activeFilter||(activeFilter==='Email'&&b.email!=='Not listed')||(activeFilter==='Phone'&&b.phone!=='Not provided'))&&(!q||[b.name,b.type,b.city,b.email,b.phone,b.website].join(' ').toLowerCase().includes(q)));
+ const cols=['Business Name','Category','City','Postcode','Email','Phone','Website','Social','Source','Record Type'];
+ const csv=[cols,...rows.map(b=>[b.name,b.type,b.city,b.postcode,b.email,b.phone,b.website,b.social,b.source,'Fictional sample'])].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='perfume-finder-sample-data.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+});
+document.getElementById('scanBtn').addEventListener('click',()=>{
+ const selected=[...document.querySelectorAll('.cat-check:checked')].map(x=>x.value);
+ const btn=document.getElementById('scanBtn'), wrap=document.getElementById('progressWrap');
+ if(!selected.length){alert('Please select at least one business category.');return;}
+ if(scanTimer)clearInterval(scanTimer);
+ let progress=0;btn.disabled=true;btn.textContent='SCANNING DEMO…';wrap.style.display='block';
+ const stages=[{p:15,t:'Preparing discovery',c:'In the live app, this connects to configured search and directory providers.'},{p:38,t:'Finding business websites',c:'In the live app, official websites will be identified from provider results.'},{p:62,t:'Extracting contact details',c:'In the live app, permitted pages will be checked for public business contacts.'},{p:84,t:'Checking duplicates',c:'In the live app, records will be matched against your saved database.'},{p:100,t:'Demo scan complete',c:'This is a simulation only. No live web search was performed.'}];
+ scanTimer=setInterval(()=>{progress+=4;const stage=stages.find(s=>progress<=s.p)||stages[stages.length-1];document.getElementById('progressFill').style.width=progress+'%';document.getElementById('progressPercent').textContent=progress+'%';document.getElementById('progressTitle').textContent=stage.t;document.getElementById('progressCaption').textContent=stage.c;if(progress>=100){clearInterval(scanTimer);scanTimer=null;btn.disabled=false;btn.innerHTML='<span aria-hidden="true">⌕</span> SCAN AGAIN';document.getElementById('statLast').textContent='Demo';}},110);
+});
+renderResults();
+</script>
+</body>
+</html>
